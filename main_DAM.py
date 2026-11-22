@@ -23,7 +23,6 @@ n_left_fix_action = n_k_action[:6].copy()
 
 print("\n")
 print("************************* Starting the simulation ************************* ")
-print("\n")
 
 ts, ns = integrate_chunked(
     rhs, n_k, (0.0, 1.0), dt_chunk=1e-6,
@@ -33,21 +32,17 @@ ts, ns = integrate_chunked(
     rtol=1e-6, atol=1e-10
 )
 
-print("\n")
 print(".............. Simulation ongoing ..............")
-print("\n")
 
 tsg, nsg = integrate_chunked(
-    rhs, n_k_gaus, (0.0, 2e-4), dt_chunk=1e-8,
+    rhs, n_k_gaus, (0.0, 2e-4), dt_chunk=1e-7,
     apply_bc_func=apply_bc,
     bc_args=(k, n_left_fix_g, 6, 90, 4),
     rhs_args=(k, n_left_fix_g, dlnk, eta1, eta2),
     rtol=1e-5, atol=1e-10
 )
 
-#print("\n")
 #print(".............. Simulation ongoing ..............")
-#print("\n")
 
 
 #tsa, nsa = integrate_chunked(
@@ -61,7 +56,6 @@ tsg, nsg = integrate_chunked(
 print("************************* Simulation completed ************************* ")
 print("\n")
 print("----------------------- Plotting Results ------------------------------- ")
-print("\n")
 
 ln_k = np.log(k)
 #p_final = np.gradient(np.log(np.maximum(ns.y[:, -1], 1e-30)), ln_k)
