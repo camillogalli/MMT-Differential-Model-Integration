@@ -35,7 +35,7 @@ ts, ns = integrate_chunked(
 print(".............. Simulation ongoing ..............")
 
 tsg, nsg = integrate_chunked(
-    rhs, n_k_gaus, (0.0, 2e-4), dt_chunk=1e-7,
+    rhs, n_k_gaus, (0.0, 1), dt_chunk=1e-7,
     apply_bc_func=apply_bc,
     bc_args=(k, n_left_fix_g, 6, 90, 4),
     rhs_args=(k, n_left_fix_g, dlnk, eta1, eta2),
