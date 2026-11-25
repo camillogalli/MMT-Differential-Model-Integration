@@ -10,7 +10,7 @@ k0 = k[135]
 
 n_k = initial_condition(1.0, k, -2/3)
 n_k_gaus = initial_condition_gaussian(1.0*k[0]**(1/6), k, k0, 0.4, 0.3, -5/6)
-n_k_action = initial_condition(1.0*k[0]**(1/6), k, -5/6)
+n_k_action = initial_condition(1.0*k[0]**(1/6), k, -2/3)
 
 n_left_fix = n_k[:6].copy() 
 n_left_fix_g = n_k_gaus[:6].copy()
@@ -27,20 +27,20 @@ print("************************* Starting the simulation ***********************
 ts, ns = integrate_chunked(
     rhs, n_k, (0.0, 1.0), dt_chunk=1e-6,
     apply_bc_func=apply_bc,
-    bc_args=(k, n_left_fix, 6, 20, 4),
+    bc_args=(k, n_left_fix, 6, 15, 4),
     rhs_args=(k, n_left_fix, dlnk, eta1, eta2),
     rtol=1e-6, atol=1e-10
 )
 
 print(".............. Simulation ongoing ..............")
 
-tsg, nsg = integrate_chunked(
-    rhs, n_k_gaus, (0.0, 1), dt_chunk=1e-7,
-    apply_bc_func=apply_bc,
-    bc_args=(k, n_left_fix_g, 6, 90, 4),
-    rhs_args=(k, n_left_fix_g, dlnk, eta1, eta2),
-    rtol=1e-5, atol=1e-10
-)
+#tsg, nsg = integrate_chunked(
+#    rhs, n_k_gaus, (0.0, 1), dt_chunk=1e-7,
+#    apply_bc_func=apply_bc,
+#    bc_args=(k, n_left_fix_g, 6, 90, 4),
+#    rhs_args=(k, n_left_fix_g, dlnk, eta1, eta2),
+#    rtol=1e-5, atol=1e-10
+#)
 
 #print(".............. Simulation ongoing ..............")
 
@@ -69,6 +69,6 @@ print("errore relativo sull'ultimo esponente di power law: ", np.abs(p_final + 5
 #ts, ns = integrate(rhs, n_k, (0.0, 0.1),  1e-6, k, n_left_fix, dlnk, eta1, eta2)
 
 plot_results(ts, ns, n_snap = 7, k = k, save_path = "outputs_DAM/DAM_results.png", show = False)
-plot_results(tsg, nsg, n_snap = 7, k = k, save_path = "outputs_DAM/DAM_results_gaussian_bump.png", show = False)
+#plot_results(tsg, nsg, n_snap = 7, k = k, save_path = "outputs_DAM/DAM_results_gaussian_bump.png", show = False)
 #plot_results(tsa, nsa, n_snap = 7, k = k, save_path = "outputs_DAM/DAM_results_action.png", show = False)
 #plot_results(ns.t, ns.y.T, n_snap = 7, k = k, save_path = "outputs_DAM/DAM_results.png", show = False)

@@ -69,9 +69,10 @@ def rhs(t, n, k, n_left_fix, dlnk , eta1, eta2):
         -eta1 * (1/n) * dndk + eta1 * (k / (n**2)) * (dndk**2) - eta1 * (k/n) * d2ndk2 + eta2 * (2*k/(n**2)) * (dndk**2)
           - 2 * eta2 * ((k**2)/(n**3)) * (dndk**3) + 2 * eta2 * ((k**2)/(n**2)) * dndk * d2ndk2
         )
+    
     dndt = omega_k * dndt_action - (N**3) * domega_dk * Phi
     dndt[:6] = 0.0
-    #dndt[-6:] = 0.0
+    dndt[-6:] = 0.0
 
     return dndt
 
@@ -83,7 +84,7 @@ def rhs_action(t, n, k, n_left_fix, dlnk , eta1, eta2):
         
     N = np.trapezoid(n, k)
 
-    dndt_action = - (N**3) * (
+    dndt_action = + (N**3) * (
         -eta1 * (1/n) * dndk + eta1 * (k / (n**2)) * (dndk**2) - eta1 * (k/n) * d2ndk2 + eta2 * (2*k/(n**2)) * (dndk**2)
             - 2 * eta2 * ((k**2)/(n**3)) * (dndk**3) + 2 * eta2 * ((k**2)/(n**2)) * dndk * d2ndk2
         )
