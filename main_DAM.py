@@ -27,7 +27,7 @@ print("\n")
 print("************************* Starting the simulation ************************* ")
 
 ts, ns = integrate_chunked(
-    rhs_action, n_k, (0.0, 1.0), dt_chunk=1e-8,
+    rhs, n_k, (0.0, 1.0), dt_chunk=1e-6,
     apply_bc_func=apply_bc,
     bc_args=(k, n_left_fix, 6, 15, 20),
     rhs_args=(k, n_left_fix, dlnk, eta1, eta2),

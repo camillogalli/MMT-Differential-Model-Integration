@@ -100,7 +100,7 @@ def rhs_correct(t, n, k, n_left_fix, dlnk , eta1, eta2):
     dndt[:6] = 0.0
     dndt[-6:] = 0.0
 
-    return dndt
+    return dndt 
 
 def rhs_action(t, n, k, n_left_fix, dlnk , eta1, eta2):
     n = apply_bc(n, k, n_left_fix, buf_left = 6, buf_right = 6, fit_points = 4)
