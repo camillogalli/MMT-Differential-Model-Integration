@@ -1,5 +1,6 @@
 import numpy as np
-from DAM import integrate, plot_results, k_space, initial_condition, rhs, integrate_chunked, apply_bc, initial_condition_gaussian, rhs_action
+from DAM import (integrate, plot_results, k_space, initial_condition, rhs, integrate_chunked, apply_bc, initial_condition_gaussian, rhs_action,
+                rhs_correct)
 from scipy.integrate import solve_ivp
 from CN_upwind import integrate_cn_upwind
 
@@ -26,7 +27,7 @@ print("\n")
 print("************************* Starting the simulation ************************* ")
 
 ts, ns = integrate_chunked(
-    rhs, n_k, (0.0, 1.0), dt_chunk=1e-6,
+    rhs_action, n_k, (0.0, 1.0), dt_chunk=1e-8,
     apply_bc_func=apply_bc,
     bc_args=(k, n_left_fix, 6, 15, 20),
     rhs_args=(k, n_left_fix, dlnk, eta1, eta2),

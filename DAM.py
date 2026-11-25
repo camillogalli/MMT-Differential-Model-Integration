@@ -76,6 +76,32 @@ def rhs(t, n, k, n_left_fix, dlnk , eta1, eta2):
 
     return dndt
 
+def rhs_correct(t, n, k, n_left_fix, dlnk , eta1, eta2):
+
+    n = apply_bc(n, k, n_left_fix, buf_left = 6, buf_right = 6, fit_points = 4)
+    #n = np.maximum(n, 1e-10)
+
+    dndk = dndk_upwind(n, k, dlnk)
+    d2ndk2 = d2ndk2_center(n, k, dlnk)
+    
+    N = np.trapezoid(n, k)
+
+    omega_k = k**0.5
+    domega_dk = 0.5 * (k**(-0.5))
+
+    Phi = -eta1 * k * dndk / n + eta2 * (k**2) * (dndk / n)**2
+
+    dndt_action = + (N**3) * (
+        eta1 * ( (1/n)*dndk + (k/n)*dndk*d2ndk2 - (k/(n**2))*(dndk**2) ) +
+        eta2 * ( 2*(k/(n**2))*(dndk**2) - 2*((k**2)/(n**3))*(dndk**3) + 2*((k/n)**2)*dndk*d2ndk2 )
+        )
+    
+    dndt = omega_k * dndt_action - (N**3) * domega_dk * Phi
+    dndt[:6] = 0.0
+    dndt[-6:] = 0.0
+
+    return dndt
+
 def rhs_action(t, n, k, n_left_fix, dlnk , eta1, eta2):
     n = apply_bc(n, k, n_left_fix, buf_left = 6, buf_right = 6, fit_points = 4)
 
@@ -84,10 +110,10 @@ def rhs_action(t, n, k, n_left_fix, dlnk , eta1, eta2):
         
     N = np.trapezoid(n, k)
 
-    dndt_action = - (N**3) * (
-        -eta1 * (1/n) * dndk + eta1 * (k / (n**2)) * (dndk**2) - eta1 * (k/n) * d2ndk2 + eta2 * (2*k/(n**2)) * (dndk**2)
-            - 2 * eta2 * ((k**2)/(n**3)) * (dndk**3) + 2 * eta2 * ((k**2)/(n**2)) * dndk * d2ndk2
-        )
+    dndt_action = + (N**3) * (
+            eta1 * ( (1/n)*dndk + (k/n)*dndk*d2ndk2 - (k/(n**2))*(dndk**2) ) +
+            eta2 * ( 2*(k/(n**2))*(dndk**2) - 2*((k**2)/(n**3))*(dndk**3) + 2*((k/n)**2)*dndk*d2ndk2 )
+            )
     dndt_action[:6] = 0.0
 
     return dndt_action
