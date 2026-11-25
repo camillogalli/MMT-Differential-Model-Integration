@@ -21,6 +21,7 @@ def smoothness_ratio(u):
 
     r = np.zeros_like(u)
     r[1:-1] = (u[1:-1] - u[:-2]) / (u[2:] - u[1:-1])
+    r = np.maximum(r, 1e10)
 
     return r
 
@@ -66,7 +67,7 @@ def cn_upwind_step(n, k, dlnk, n_iter, dt, n_left_fix, eta1, eta2, tol = 1e-10):
 
     return n_next
 
-def integrate_cn_upwind(rhs, n0, t_span, dt, k, n_left_fix, dlnk , eta1, eta2, n_iter = 10):
+def integrate_cn_upwind( n0, t_span, dt, k, n_left_fix, dlnk , eta1, eta2, n_iter = 10):
     t0, tf = t_span
     n_step = int(np.ceil((tf-t0)/dt))
 

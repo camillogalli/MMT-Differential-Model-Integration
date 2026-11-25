@@ -1,11 +1,12 @@
 import numpy as np
 from DAM import integrate, plot_results, k_space, initial_condition, rhs, integrate_chunked, apply_bc, initial_condition_gaussian, rhs_action
 from scipy.integrate import solve_ivp
+from CN_upwind import integrate_cn_upwind
 
 eta1 = 216
 eta2 = 162
 
-k, dlnk = k_space(1e-3, 5, 500)
+k, dlnk = k_space(1e-3, 1, 500)
 k0 = k[135] 
 
 n_k = initial_condition(1.0, k, -2/3)
@@ -27,12 +28,12 @@ print("************************* Starting the simulation ***********************
 ts, ns = integrate_chunked(
     rhs, n_k, (0.0, 1.0), dt_chunk=1e-6,
     apply_bc_func=apply_bc,
-    bc_args=(k, n_left_fix, 6, 15, 4),
+    bc_args=(k, n_left_fix, 6, 15, 20),
     rhs_args=(k, n_left_fix, dlnk, eta1, eta2),
     rtol=1e-6, atol=1e-10
 )
 
-print(".............. Simulation ongoing ..............")
+#print(".............. Simulation ongoing ..............")
 
 #tsg, nsg = integrate_chunked(
 #    rhs, n_k_gaus, (0.0, 1), dt_chunk=1e-7,
@@ -72,3 +73,12 @@ plot_results(ts, ns, n_snap = 7, k = k, save_path = "outputs_DAM/DAM_results.png
 #plot_results(tsg, nsg, n_snap = 7, k = k, save_path = "outputs_DAM/DAM_results_gaussian_bump.png", show = False)
 #plot_results(tsa, nsa, n_snap = 7, k = k, save_path = "outputs_DAM/DAM_results_action.png", show = False)
 #plot_results(ns.t, ns.y.T, n_snap = 7, k = k, save_path = "outputs_DAM/DAM_results.png", show = False)
+
+#print("----------------------- Second model --------------------------------")
+
+#ts1, ns1 = integrate_cn_upwind(
+#    n_k, (0.0, 1.0), 1e-6, k,
+#    n_left_fix, dlnk, eta1, eta2, n_iter = 10
+#)
+
+#plot_results(ts1, ns1, n_snap = 7, k = k, save_path = "outputs_DAM/CN_upwind_results.png", show = False)
