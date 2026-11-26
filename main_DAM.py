@@ -79,7 +79,8 @@ print("----------------------- Second model --------------------------------")
 
 ts1, ns1 = integrate_cn_upwind(
     n_k, (0.0, 1.0), 1e-6, k,
-    n_left_fix, dlnk, eta1, eta2, n_iter = 10
+    n_left_fix, dlnk, eta1, eta2, n_iter = 50,
+    save_step = 1000
 )
 
 plot_results(ts1, ns1, n_snap = 7, k = k, save_path = "outputs_DAM/CN_upwind_results.png", show = False)
