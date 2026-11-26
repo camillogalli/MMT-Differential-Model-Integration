@@ -26,13 +26,13 @@ n_left_fix_action = n_k_action[:6].copy()
 print("\n")
 print("************************* Starting the simulation ************************* ")
 
-ts, ns = integrate_chunked(
-    rhs, n_k, (0.0, 1.0), dt_chunk=1e-6,
-    apply_bc_func=apply_bc,
-    bc_args=(k, n_left_fix, 6, 15, 20),
-    rhs_args=(k, n_left_fix, dlnk, eta1, eta2),
-    rtol=1e-6, atol=1e-10
-)
+#ts, ns = integrate_chunked(
+#    rhs, n_k, (0.0, 1.0), dt_chunk=1e-6,
+#    apply_bc_func=apply_bc,
+#    bc_args=(k, n_left_fix, 6, 15, 20),
+#    rhs_args=(k, n_left_fix, dlnk, eta1, eta2),
+#    rtol=1e-6, atol=1e-10
+#)
 
 #print(".............. Simulation ongoing ..............")
 
@@ -63,23 +63,23 @@ ln_k = np.log(k)
 #p_final = np.gradient(np.log(np.maximum(ns.y[:, -1], 1e-30)), ln_k)
 #p_final = np.mean(p_final[135:165])
 
-p_final = np.gradient(np.log(np.maximum(ns[-1], 1e-30)), ln_k)
-p_final = np.mean(p_final[135:165])
+#p_final = np.gradient(np.log(np.maximum(ns[-1], 1e-30)), ln_k)
+#p_final = np.mean(p_final[135:165])
 
-print("errore relativo sull'ultimo esponente di power law: ", np.abs(p_final + 5/6))
+#print("errore relativo sull'ultimo esponente di power law: ", np.abs(p_final + 5/6))
 
 #ts, ns = integrate(rhs, n_k, (0.0, 0.1),  1e-6, k, n_left_fix, dlnk, eta1, eta2)
 
-plot_results(ts, ns, n_snap = 7, k = k, save_path = "outputs_DAM/DAM_results.png", show = False)
+#plot_results(ts, ns, n_snap = 7, k = k, save_path = "outputs_DAM/DAM_results.png", show = False)
 #plot_results(tsg, nsg, n_snap = 7, k = k, save_path = "outputs_DAM/DAM_results_gaussian_bump.png", show = False)
 #plot_results(tsa, nsa, n_snap = 7, k = k, save_path = "outputs_DAM/DAM_results_action.png", show = False)
 #plot_results(ns.t, ns.y.T, n_snap = 7, k = k, save_path = "outputs_DAM/DAM_results.png", show = False)
 
-#print("----------------------- Second model --------------------------------")
+print("----------------------- Second model --------------------------------")
 
-#ts1, ns1 = integrate_cn_upwind(
-#    n_k, (0.0, 1.0), 1e-6, k,
-#    n_left_fix, dlnk, eta1, eta2, n_iter = 10
-#)
+ts1, ns1 = integrate_cn_upwind(
+    n_k, (0.0, 1.0), 1e-6, k,
+    n_left_fix, dlnk, eta1, eta2, n_iter = 10
+)
 
-#plot_results(ts1, ns1, n_snap = 7, k = k, save_path = "outputs_DAM/CN_upwind_results.png", show = False)
+plot_results(ts1, ns1, n_snap = 7, k = k, save_path = "outputs_DAM/CN_upwind_results.png", show = False)

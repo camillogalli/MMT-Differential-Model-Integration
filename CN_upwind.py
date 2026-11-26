@@ -17,12 +17,13 @@ def flux_bracket(n, k, dlnk, eta1, eta2):
     return flux
 
 
-def smoothness_ratio(u):
-
+def smoothness_ratio(u, eps=1e-12):
     r = np.zeros_like(u)
-    r[1:-1] = (u[1:-1] - u[:-2]) / (u[2:] - u[1:-1])
-    r = np.maximum(r, 1e10)
+    num = u[1:-1] - u[:-2]
+    den = u[2:] - u[1:-1]
 
+    safe_den = np.where(np.abs(den) < eps, eps * np.sign(den) + (den == 0) * eps, den)
+    r[1:-1] = num / safe_den
     return r
 
 def limiter(r):
@@ -31,7 +32,7 @@ def limiter(r):
     return minmod
 
 def limited_flux(u):
-    r = smoothness_ratio(u)
+    r = smoothness_ratio(u, eps=1e-12)
     phi = limiter(r)
 
     F = u[:-1] + 0.5 * phi[:-1] * (u[1:] - u[:-1])
