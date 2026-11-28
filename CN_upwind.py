@@ -39,24 +39,24 @@ def limited_flux(u):
 
     return F
 
-def flux_divergence(F):
+def flux_divergence(F, dlnk, k):
 
     div = np.zeros(len(F) + 1)
-    div[1:-1] = F[1:] - F[:-1]
+    div[1:-1] = ((F[1:] - F[:-1])/dlnk)/k[1:-1]
     return div
 
 def cn_upwind_step(n, k, dlnk, n_iter, dt, n_left_fix, eta1, eta2, tol = 1e-10):
     n = apply_bc(n, k, n_left_fix, buf_left=6, buf_right=6, fit_points=4)
     Phi_old = flux_bracket(n, k, dlnk, eta1, eta2)
     F_old = limited_flux(Phi_old)
-    div_old = flux_divergence(F_old)
+    div_old = flux_divergence(F_old, dlnk, k)
     
     n_next = n.copy()
 
     for _ in range(n_iter):
         Phi_new = flux_bracket(n_next, k, dlnk, eta1, eta2)
         F_new = limited_flux(Phi_new)
-        div_new = flux_divergence(F_new)
+        div_new = flux_divergence(F_new, dlnk, k)
 
         n_candidate = n + (dt / 2) * (div_old + div_new)
         n_candidate = apply_bc(n_candidate, k, n_left_fix, buf_left=6, buf_right=6, fit_points=4)
